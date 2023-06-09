@@ -1,0 +1,74 @@
+<%- include("includes/header"); %>
+
+    <script>
+
+        function confirmar(mensagem) {
+            console.log(event)
+            const result = confirm(mensagem);
+
+            if (!result) {
+                return false;
+            }
+        }
+
+    </script>
+
+    <div class="container">
+        <h3>Lista de Contatos</h3>
+
+        <div>
+            <a type="button" class="btn btn-primary" href="/contato/create/">Adicionar Contato</a>
+        </div>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col" style="min-width: 150px">Nome</th>
+                    <th scope="col">Celular</th>
+                    <th scope="col">Email</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% for(const agenda of contato) { %>
+                    <tr class="<%= agenda.done == 1 ? 'concluido' : '' %>">
+                        <td><%= agenda.nome %></td>
+                        <td><%= agenda.celular %></td>
+                        <td><%= agenda.email %></td>
+                        <td>
+                            <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                                data-bs-target="#exampleModal<%=agenda.id%>">
+                                Visualizar Endereço
+                            </button>
+                            <div class="modal fade" id="exampleModal<%=agenda.id%>" tabindex="-1"
+                                aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-body">
+                                            Rua: <%= agenda.rua %><br>
+                                            Número: <%= agenda.numero %><br>
+                                            Bairro: <%= agenda.bairro %><br>
+                                            Estado: <%= agenda.estado %><br>
+                                            Cep: <%= agenda.cep %><br>
+                                            Cidade: <%= agenda.cidade %><br>
+                                            Complemento: <%= agenda.complemento %><br>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary"
+                                                data-bs-dismiss="modal">Close</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <a type="button" class="btn btn-success" href="/contato/edit/<%= agenda.id %>">Editar</a>
+                            <form action="/contato/remove/<%= agenda.id %>" method="POST" style="display: inline-block"
+                                onsubmit="return confirmar('Tem certeza que deseja excluir essa tarefa?')">
+                                <button type="submit" class="btn btn-danger">Excluir</button>
+                            </form>
+                        </td>
+                    </tr>
+                    <% } %>
+            </tbody>
+        </table>
+
+    </div>
+
+    <%- include("includes/footer"); %>
